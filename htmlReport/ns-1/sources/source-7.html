@@ -1,0 +1,186 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > ResponseHandeler</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">io.swagger.api</a>
+</div>
+
+<h1>Coverage Summary for Class: ResponseHandeler (io.swagger.api)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ResponseHandeler</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (43/43)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package io.swagger.api;
+&nbsp;
+&nbsp;import io.swagger.model.Error;
+&nbsp;import io.swagger.model.*;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import java.util.UUID;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;public class ResponseHandeler {</b>
+&nbsp;
+&nbsp;    public ResponseEntity&lt;Object&gt; buildUserSuccessResponse(String userId, String code, String serviceFlow, String message , HttpStatus status) {
+<b class="fc">&nbsp;        String serviceRequestId = UUID.randomUUID().toString();</b>
+<b class="fc">&nbsp;        UserSuccessResponse response = new UserSuccessResponse();</b>
+<b class="fc">&nbsp;        response.setServiceRequestId(serviceRequestId);</b>
+<b class="fc">&nbsp;        response.setCode(code);</b>
+<b class="fc">&nbsp;        response.setServiceFlow(serviceFlow);</b>
+<b class="fc">&nbsp;        response.setMessage(message);</b>
+<b class="fc">&nbsp;        response.setUserid(userId);</b>
+<b class="fc">&nbsp;        response.setStatus(&quot;SUCCEEDED&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        return new ResponseEntity&lt;&gt;(response, status);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ResponseEntity&lt;Object&gt; buildSuccessResponse(String code, String serviceFlow, String message , HttpStatus status) {
+<b class="fc">&nbsp;        String serviceRequestId = UUID.randomUUID().toString();</b>
+&nbsp;
+<b class="fc">&nbsp;        SuccessResponse response = new SuccessResponse();</b>
+<b class="fc">&nbsp;        response.setServiceRequestId(serviceRequestId);</b>
+<b class="fc">&nbsp;        response.setCode(code);</b>
+<b class="fc">&nbsp;        response.setServiceFlow(serviceFlow);</b>
+<b class="fc">&nbsp;        response.setMessage(message);</b>
+<b class="fc">&nbsp;        response.setStatus(&quot;SUCCEEDED&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        return new ResponseEntity&lt;&gt;(response, status);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    public ResponseEntity&lt;Object&gt; buildLoginUserSuccessResponse(String userId, String authToken, HttpStatus status) {
+<b class="fc">&nbsp;        String serviceRequestId = UUID.randomUUID().toString();</b>
+&nbsp;
+<b class="fc">&nbsp;        LoginSuccessResponse response = new LoginSuccessResponse();</b>
+<b class="fc">&nbsp;        response.setServiceRequestId(serviceRequestId);</b>
+<b class="fc">&nbsp;        response.setCode(&quot;LOG01&quot;);</b>
+<b class="fc">&nbsp;        response.setAuthtoken(authToken);</b>
+<b class="fc">&nbsp;        response.setServiceFlow(&quot;User_Login&quot;);</b>
+<b class="fc">&nbsp;        response.setMessage(&quot;user logged in successfully&quot;);</b>
+<b class="fc">&nbsp;        response.setUserid(userId);</b>
+<b class="fc">&nbsp;        response.setStatus(&quot;SUCCEEDED&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        return new ResponseEntity&lt;&gt;(response, status);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ResponseEntity&lt;Object&gt; buildErrorResponse(String errorCode, String errorUserMsg, String code, String message, String step, String serviceFlow, HttpStatus status) {
+<b class="fc">&nbsp;        Error error = new Error();</b>
+<b class="fc">&nbsp;        ErrorErrors e = new ErrorErrors();</b>
+<b class="fc">&nbsp;        e.setCode(code);</b>
+<b class="fc">&nbsp;        e.setMessage(message);</b>
+&nbsp;
+<b class="fc">&nbsp;        List&lt;ErrorErrors&gt; errorList = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        errorList.add(e);</b>
+&nbsp;
+<b class="fc">&nbsp;        error.setErrors(errorList);</b>
+<b class="fc">&nbsp;        error.setErrorCode(errorCode);</b>
+<b class="fc">&nbsp;        error.setErrorUserMsg(errorUserMsg);</b>
+<b class="fc">&nbsp;        error.setStep(step);</b>
+<b class="fc">&nbsp;        error.setStatus(&quot;FAILED&quot;);</b>
+<b class="fc">&nbsp;        error.setServiceRequestId(UUID.randomUUID().toString());</b>
+<b class="fc">&nbsp;        error.setHttpErrorCode(String.valueOf(status.value()));</b>
+<b class="fc">&nbsp;        error.setServiceFlow(serviceFlow);</b>
+&nbsp;
+<b class="fc">&nbsp;        return new ResponseEntity&lt;&gt;(error, status);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-06-21 11:02</div>
+</div>
+</body>
+</html>

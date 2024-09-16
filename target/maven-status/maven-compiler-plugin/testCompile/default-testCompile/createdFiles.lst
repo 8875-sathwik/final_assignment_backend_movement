@@ -1,0 +1,12 @@
+io\swagger\api\V3ApiControllerTest.class
+io\swagger\api\V4ApiControllerTest.class
+io\swagger\api\ErrorHandlerTest$TestObject.class
+io\swagger\api\ErrorHandlerTest.class
+io\swagger\api\ResponseHandlerTest.class
+io\swagger\api\V2ApiControllerTest.class
+io\swagger\api\V5ApiControllerTest.class
+io\swagger\api\UserServiceTest.class
+io\swagger\api\V1ApiControllerTest$CustomDateConfig.class
+io\swagger\api\V1ApiControllerTest.class
+io\swagger\api\SecurityApiTest.class
+io\swagger\api\InventoryServiceTest.class

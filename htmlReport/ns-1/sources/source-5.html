@@ -1,0 +1,249 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > InventoryService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">io.swagger.api</a>
+</div>
+
+<h1>Coverage Summary for Class: InventoryService (io.swagger.api)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">InventoryService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (9/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    92.6%
+  </span>
+  <span class="absValue">
+    (50/54)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package io.swagger.api;
+&nbsp;
+&nbsp;import io.swagger.entity.InventoryEntity;
+&nbsp;import io.swagger.entity.UserEntity;
+&nbsp;import io.swagger.model.InventoryItem;
+&nbsp;import io.swagger.model.SellItempayload;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;import io.swagger.repository.inventoryRepo;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Optional;
+&nbsp;
+&nbsp;
+&nbsp;@Service
+&nbsp;public class InventoryService {
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private final inventoryRepo inventoryRepo;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private final io.swagger.repository.userRepo userRepo;
+&nbsp;
+<b class="fc">&nbsp;    public InventoryService(io.swagger.repository.inventoryRepo inventoryRepo, io.swagger.repository.userRepo userRepo) {</b>
+<b class="fc">&nbsp;        this.inventoryRepo = inventoryRepo;</b>
+<b class="fc">&nbsp;        this.userRepo = userRepo;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public void createInventory(InventoryItem body){
+<b class="fc">&nbsp;       InventoryEntity  i = new InventoryEntity(body.getName() , body.getQuantity(), body.getPrice());</b>
+&nbsp;
+<b class="fc">&nbsp;        inventoryRepo.save(i);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public void updateInventory(InventoryItem body) {
+<b class="fc">&nbsp;        Optional&lt;InventoryEntity&gt; optionalInventory = inventoryRepo.findById(body.getId());</b>
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;        InventoryEntity existingInventory = optionalInventory.get();</b>
+&nbsp;
+&nbsp;        // Update the inventory fields
+<b class="fc">&nbsp;        existingInventory.setName(body.getName());</b>
+<b class="fc">&nbsp;        existingInventory.setQuantity(body.getQuantity());</b>
+<b class="fc">&nbsp;        existingInventory.setPrice(body.getPrice());</b>
+&nbsp;        // Update other fields as needed
+&nbsp;
+&nbsp;        // Save the updated inventory entity
+<b class="fc">&nbsp;        inventoryRepo.save(existingInventory);</b>
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;    public boolean checkInventoryById(Long id) {
+<b class="fc">&nbsp;        Optional&lt;InventoryEntity&gt; optionalInventory = inventoryRepo.findById(id);</b>
+&nbsp;
+<b class="fc">&nbsp;        if (optionalInventory.isPresent()) {</b>
+&nbsp;
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void deleteInventory(Long itemId) {
+&nbsp;
+<b class="fc">&nbsp;        Optional&lt;InventoryEntity&gt; optionalInventory = inventoryRepo.findById(itemId);</b>
+<b class="fc">&nbsp;        InventoryEntity existingInventory = optionalInventory.get();</b>
+&nbsp;
+<b class="fc">&nbsp;        inventoryRepo.delete(existingInventory);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;InventoryEntity&gt; fetchInventory(String name) {
+<b class="fc">&nbsp;        if(name != null){</b>
+&nbsp;
+<b class="fc">&nbsp;            List&lt;InventoryEntity&gt; i = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;            i.add(inventoryRepo.findByName(name));</b>
+&nbsp;
+<b class="fc">&nbsp;            return i;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return inventoryRepo.findAll();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String sellInventory(SellItempayload body , String role , String userId) {
+<b class="fc">&nbsp;        Optional&lt;InventoryEntity&gt; inventory = inventoryRepo.findById(body.getId());</b>
+<b class="fc">&nbsp;        InventoryEntity sellingInventory = inventory.get();</b>
+&nbsp;
+<b class="fc">&nbsp;        Integer quantity =  sellingInventory.getQuantity() - body.getQuantity();</b>
+<b class="fc">&nbsp;        sellingInventory.setQuantity(quantity);</b>
+&nbsp;
+<b class="fc">&nbsp;        Float prize = sellingInventory.getPrice();</b>
+<b class="fc">&nbsp;        Float totalPrize = body.getQuantity() * prize;</b>
+&nbsp;
+<b class="fc">&nbsp;        if (role.equals(&quot;STAFF&quot;)){</b>
+<b class="fc">&nbsp;            UserEntity u = userRepo.findByUserId(userId);</b>
+&nbsp;
+<b class="fc">&nbsp;            Float oldwalletbalance = u.getWalBalnce();</b>
+<b class="fc">&nbsp;            Float newWalletBalance = oldwalletbalance - totalPrize;</b>
+&nbsp;
+<b class="fc">&nbsp;            u.setWalBalnce(newWalletBalance);</b>
+&nbsp;
+<b class="fc">&nbsp;            userRepo.save(u);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        inventoryRepo.save(sellingInventory);</b>
+&nbsp;
+<b class="fc">&nbsp;        return  sellingInventory.getName() + &quot; is sold at &quot; + sellingInventory.getPrice() + &quot; each,which remains &quot;  +  quantity;</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean checkWalletbalance(SellItempayload body ,String role ,String userId) {
+<b class="fc">&nbsp;        if (role == &quot;STAFF&quot;) {</b>
+<b class="fc">&nbsp;            UserEntity u = userRepo.findByUserId(userId);</b>
+&nbsp;
+<b class="fc">&nbsp;            Optional&lt;InventoryEntity&gt; inventory = inventoryRepo.findById(body.getId());</b>
+<b class="fc">&nbsp;            InventoryEntity sellingInventory = inventory.get();</b>
+&nbsp;
+<b class="fc">&nbsp;            Integer quantity =  sellingInventory.getQuantity() - body.getQuantity();</b>
+<b class="fc">&nbsp;            sellingInventory.setQuantity(quantity);</b>
+&nbsp;
+<b class="fc">&nbsp;            Float prize = sellingInventory.getPrice();</b>
+<b class="fc">&nbsp;            Float totalPrize = quantity * prize;</b>
+&nbsp;
+<b class="fc">&nbsp;            if (u.getWalBalnce() &lt;= totalPrize){</b>
+<b class="fc">&nbsp;                return true;</b>
+&nbsp;            }
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean checkInventoryQuantity(SellItempayload body) {
+<b class="fc">&nbsp;        Optional&lt;InventoryEntity&gt; inventory = inventoryRepo.findById(body.getId());</b>
+<b class="fc">&nbsp;        InventoryEntity sellingInventory = inventory.get();</b>
+<b class="fc">&nbsp;        if(body.getQuantity() &gt; sellingInventory.getQuantity()){</b>
+<b class="fc">&nbsp;            return true;</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-06-21 11:02</div>
+</div>
+</body>
+</html>

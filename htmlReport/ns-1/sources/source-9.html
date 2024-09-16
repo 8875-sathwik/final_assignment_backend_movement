@@ -1,0 +1,206 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > UserService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">io.swagger.api</a>
+</div>
+
+<h1>Coverage Summary for Class: UserService (io.swagger.api)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UserService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97.3%
+  </span>
+  <span class="absValue">
+    (36/37)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package io.swagger.api;
+&nbsp;
+&nbsp;import io.swagger.entity.UserEntity;
+&nbsp;import io.swagger.model.AddMoney;
+&nbsp;import io.swagger.model.User;
+&nbsp;import io.swagger.model.UserLoginBody;
+&nbsp;import io.swagger.repository.userRepo;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;
+&nbsp;@Service
+&nbsp;public class UserService {
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private final userRepo userRepo;
+&nbsp;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private SecurityApi securityApi;
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;    public UserService(userRepo userRepo) {</b>
+<b class="fc">&nbsp;        this.userRepo = userRepo;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public UserEntity getUserbyUserId(String userid){
+<b class="fc">&nbsp;        return userRepo.findByUserId(userid);</b>
+&nbsp;    }
+&nbsp;    public UserEntity getUserbyUserName(String username){
+<b class="fc">&nbsp;        return userRepo.findByUserName(username);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public void changeloginStatus(String userId , String loginStatus ){
+<b class="fc">&nbsp;        UserEntity user = userRepo.findByUserId(userId);</b>
+<b class="fc">&nbsp;        user.setLoginStatus(loginStatus);</b>
+&nbsp;
+<b class="fc">&nbsp;        userRepo.save(user);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public  boolean checkUserisAlreadyLoggedOut(String userId){
+<b class="fc">&nbsp;        UserEntity u = userRepo.findByUserId(userId);</b>
+<b class="fc">&nbsp;        if(u.getLoginStatus() == &quot;IN&quot;){</b>
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean Authenticatelogin(UserLoginBody body){
+<b class="fc">&nbsp;        UserEntity user = userRepo.findByUserName(body.getUsername());</b>
+<b class="fc">&nbsp;        return user.getUserName().equals(body.getUsername()) &amp;&amp; user.getPassword().equals(body.getPassword());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void createUserService(User body){
+<b class="fc">&nbsp;        UserEntity u = new UserEntity(body.getUserid(),body.getFirstName(),</b>
+<b class="fc">&nbsp;                body.getLastName(), body.getEmail(),</b>
+<b class="fc">&nbsp;                body.getPassword(), body.getPhone(),</b>
+<b class="fc">&nbsp;                body.getDob(),&quot;A&quot;,</b>
+<b class="fc">&nbsp;                body.getUsername(), body.getWorkspaceId());</b>
+<b class="fc">&nbsp;        u.setLoginStatus(&quot;OUT&quot;);</b>
+<b class="fc">&nbsp;        u.setWalBalnce((float) 0);</b>
+&nbsp;
+<b class="fc">&nbsp;        userRepo.save(u);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public void updateUserService(User body) {
+<b class="fc">&nbsp;        UserEntity existingUser = userRepo.findByUserId(body.getUserid());</b>
+&nbsp;
+<b class="fc">&nbsp;        existingUser.setFirstName(body.getFirstName());</b>
+<b class="fc">&nbsp;        existingUser.setLastName(body.getLastName());</b>
+<b class="fc">&nbsp;        existingUser.setEmailId(body.getEmail());</b>
+<b class="fc">&nbsp;        existingUser.setPassword(body.getPassword());</b>
+<b class="fc">&nbsp;        existingUser.setMsisdn(body.getPhone());</b>
+<b class="fc">&nbsp;        existingUser.setDob(body.getDob());</b>
+<b class="fc">&nbsp;        existingUser.setUserName(body.getUsername());</b>
+&nbsp;
+&nbsp;        // Save the updated user entity
+<b class="fc">&nbsp;        userRepo.save(existingUser);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public void deleteUserService(String userid) {
+<b class="fc">&nbsp;        UserEntity u = userRepo.findByUserId(userid);</b>
+<b class="fc">&nbsp;        u.setStatus(&quot;N&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        userRepo.save(u);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public void addmoney(AddMoney body) {
+&nbsp;
+<b class="fc">&nbsp;        UserEntity user = userRepo.findByUserId(body.getUserId());</b>
+&nbsp;
+<b class="fc">&nbsp;        Float balance = user.getWalBalnce() + body.getAmmount();</b>
+<b class="fc">&nbsp;        user.setWalBalnce(balance);</b>
+<b class="fc">&nbsp;        userRepo.save(user);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-06-21 11:02</div>
+</div>
+</body>
+</html>

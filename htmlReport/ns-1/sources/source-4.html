@@ -1,0 +1,204 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > ErrorHandler</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">io.swagger.api</a>
+</div>
+
+<h1>Coverage Summary for Class: ErrorHandler (io.swagger.api)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ErrorHandler</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    63.8%
+  </span>
+  <span class="absValue">
+    (37/58)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package io.swagger.api;
+&nbsp;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import java.lang.reflect.Field;
+&nbsp;import java.util.List;
+&nbsp;import java.util.regex.Pattern;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;public class ErrorHandler {</b>
+&nbsp;    private String errorValue;
+&nbsp;    private String errorType;
+&nbsp;
+&nbsp;    public boolean checkbody(Object body, List&lt;String&gt; fieldsToValidate) {
+<b class="fc">&nbsp;        errorValue = null;  // Reset the errorValue variable</b>
+<b class="fc">&nbsp;        errorType = null;   // Reset the errorType variable</b>
+&nbsp;
+<b class="fc">&nbsp;        if (body == null) {</b>
+<b class="fc">&nbsp;            errorValue = &quot;body&quot;;</b>
+<b class="fc">&nbsp;            errorType = &quot;body is null&quot;;</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        Field[] fields = body.getClass().getDeclaredFields();</b>
+<b class="fc">&nbsp;        Pattern alphanumericPattern = Pattern.compile(&quot;^[a-zA-Z0-9]*$&quot;);</b>
+<b class="fc">&nbsp;        Pattern emailPattern = Pattern.compile(&quot;^[\\w.%+-]+@[\\w.-]+\\.\\w{2,}$&quot;);</b>
+<b class="fc">&nbsp;        Pattern phonePattern = Pattern.compile(&quot;^\\d+$&quot;);</b>
+<b class="fc">&nbsp;        Pattern passwordPattern = Pattern.compile(&quot;^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&amp;])[A-Za-z\\d@$!%*#?&amp;]{8,}$&quot;);</b>
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;        for (Field field : fields) {</b>
+<b class="fc">&nbsp;            if (fieldsToValidate.contains(field.getName())) {</b>
+<b class="fc">&nbsp;                field.setAccessible(true);</b>
+&nbsp;                try {
+<b class="fc">&nbsp;                    Object value = field.get(body);</b>
+<b class="fc">&nbsp;                    if (value == null) {</b>
+<b class="nc">&nbsp;                        errorValue = field.getName();</b>
+<b class="nc">&nbsp;                        errorType = &quot;empty&quot;;</b>
+<b class="nc">&nbsp;                        return false;</b>
+&nbsp;                    }
+<b class="fc">&nbsp;                    if (value instanceof String) {</b>
+<b class="fc">&nbsp;                        String stringValue = (String) value;</b>
+<b class="fc">&nbsp;                        if (stringValue.trim().isEmpty()) {</b>
+<b class="fc">&nbsp;                            errorValue = field.getName();</b>
+<b class="fc">&nbsp;                            errorType = &quot;empty&quot;;</b>
+<b class="fc">&nbsp;                            return false;</b>
+&nbsp;                        }
+<b class="fc">&nbsp;                        if (field.getName().equals(&quot;email&quot;)) {</b>
+<b class="fc">&nbsp;                            if (!emailPattern.matcher(stringValue).matches()) {</b>
+<b class="fc">&nbsp;                                errorValue = field.getName();</b>
+<b class="fc">&nbsp;                                errorType = &quot;invalid&quot;;</b>
+<b class="fc">&nbsp;                                return false;</b>
+&nbsp;                            }
+<b class="fc">&nbsp;                        } else if (field.getName().equals(&quot;phone&quot;)) {</b>
+<b class="fc">&nbsp;                            if (!phonePattern.matcher(stringValue).matches()) {</b>
+<b class="nc">&nbsp;                                errorValue = field.getName();</b>
+<b class="nc">&nbsp;                                errorType = &quot;invalid&quot;;</b>
+<b class="nc">&nbsp;                                return false;</b>
+&nbsp;                            }
+<b class="fc">&nbsp;                        } else if (field.getName().equals(&quot;password&quot;)) { // Validation for password field</b>
+<b class="nc">&nbsp;                            if (!passwordPattern.matcher(stringValue).matches()) {</b>
+<b class="nc">&nbsp;                                errorValue = field.getName();</b>
+<b class="nc">&nbsp;                                errorType = &quot;invalid&quot;;</b>
+<b class="nc">&nbsp;                                return false;</b>
+&nbsp;                            }
+&nbsp;                        } else {
+<b class="fc">&nbsp;                            if (!alphanumericPattern.matcher(stringValue).matches()) {</b>
+<b class="nc">&nbsp;                                errorValue = field.getName();</b>
+<b class="nc">&nbsp;                                errorType = &quot;invalid&quot;;</b>
+<b class="nc">&nbsp;                                return false;</b>
+&nbsp;                            }
+&nbsp;                        }
+<b class="fc">&nbsp;                    } else if (!field.getType().isPrimitive() &amp;&amp; !field.getType().isInstance(value)) {</b>
+<b class="nc">&nbsp;                        errorValue = field.getName();</b>
+<b class="nc">&nbsp;                        errorType = &quot;invalidType&quot;;</b>
+<b class="nc">&nbsp;                        return false;</b>
+&nbsp;                    }
+<b class="nc">&nbsp;                } catch (IllegalAccessException e) {</b>
+<b class="nc">&nbsp;                    e.printStackTrace();</b>
+<b class="nc">&nbsp;                    errorValue = field.getName();</b>
+<b class="nc">&nbsp;                    errorType = &quot;error accessing field&quot;;</b>
+<b class="nc">&nbsp;                    return false;</b>
+<b class="fc">&nbsp;                }</b>
+&nbsp;            }
+&nbsp;        }
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getErrorValue() {
+<b class="fc">&nbsp;        return errorValue;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getErrorType() {
+<b class="fc">&nbsp;        return errorType;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-06-21 11:02</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,212 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > V2ApiController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">io.swagger.api</a>
+</div>
+
+<h1>Coverage Summary for Class: V2ApiController (io.swagger.api)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">V2ApiController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (25/25)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package io.swagger.api;
+&nbsp;
+&nbsp;import com.fasterxml.jackson.databind.ObjectMapper;
+&nbsp;import io.swagger.entity.UserEntity;
+&nbsp;import io.swagger.v3.oas.annotations.Parameter;
+&nbsp;import io.swagger.v3.oas.annotations.enums.ParameterIn;
+&nbsp;import io.swagger.v3.oas.annotations.media.Schema;
+&nbsp;import jakarta.servlet.http.HttpServletRequest;
+&nbsp;import org.slf4j.Logger;
+&nbsp;import org.slf4j.LoggerFactory;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.http.HttpHeaders;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.PathVariable;
+&nbsp;import org.springframework.web.bind.annotation.RequestParam;
+&nbsp;import org.springframework.web.bind.annotation.RestController;
+&nbsp;
+&nbsp;import jakarta.validation.Valid;
+&nbsp;import jakarta.validation.constraints.NotNull;
+&nbsp;
+&nbsp;@javax.annotation.Generated(value = &quot;io.swagger.codegen.v3.generators.java.SpringCodegen&quot;, date = &quot;2024-05-23T10:15:39.378212833Z[GMT]&quot;)
+&nbsp;@RestController
+&nbsp;public class V2ApiController implements V2Api {
+&nbsp;
+<b class="fc">&nbsp;    private static final Logger log = LoggerFactory.getLogger(V2ApiController.class);</b>
+&nbsp;
+&nbsp;    private final ObjectMapper objectMapper;
+&nbsp;
+&nbsp;
+&nbsp;    private final HttpServletRequest request;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private SecurityApi securityApi;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private UserService userService;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private InventoryService inventoryService;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private ErrorHandler errorHandler;
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    private ResponseHandeler responseHandeler;
+&nbsp;
+&nbsp;    @org.springframework.beans.factory.annotation.Autowired
+<b class="fc">&nbsp;    public V2ApiController(ObjectMapper objectMapper, HttpServletRequest request , SecurityApi securityApi ,UserService userService, InventoryService inventoryService , ErrorHandler errorHandler ,ResponseHandeler responseHandeler) {</b>
+<b class="fc">&nbsp;        this.objectMapper = objectMapper;</b>
+<b class="fc">&nbsp;        this.request = request;</b>
+<b class="fc">&nbsp;        this.securityApi = securityApi;</b>
+<b class="fc">&nbsp;        this.errorHandler = errorHandler;</b>
+<b class="fc">&nbsp;        this.userService = userService;</b>
+<b class="fc">&nbsp;        this.inventoryService=inventoryService;</b>
+<b class="fc">&nbsp;        this.responseHandeler=responseHandeler;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public ResponseEntity&lt;Object&gt; deleteInventory(@NotNull @Parameter(in = ParameterIn.QUERY, description = &quot;ID of the item to delete.&quot; ,required=true,schema=@Schema()) @Valid @RequestParam(value = &quot;itemId&quot;, required = true) Long itemId,HttpServletRequest request
+&nbsp;) {
+<b class="fc">&nbsp;        String accept = request.getHeader(&quot;Accept&quot;);</b>
+<b class="fc">&nbsp;        String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);</b>
+&nbsp;
+<b class="fc">&nbsp;        if (!securityApi.authenticateUserWithCredentials(authorization , &quot;ADMIN&quot;)) {</b>
+<b class="fc">&nbsp;            return responseHandeler.buildErrorResponse(</b>
+&nbsp;                    &quot;AC1001&quot;, &quot;provided Authentication is wrong or user is not authorized to perform this action&quot;, &quot;1001&quot;,
+&nbsp;                    &quot;Authentication is worng&quot;, &quot;Auth_check&quot;, &quot;AUTH_CHECK&quot;, HttpStatus.UNAUTHORIZED);
+&nbsp;        }
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;        if (inventoryService.checkInventoryById(itemId)) {</b>
+<b class="fc">&nbsp;            return responseHandeler.buildErrorResponse(</b>
+&nbsp;                    &quot;BR1001&quot;, &quot;item does not exist&quot;, &quot;1004&quot;,
+&nbsp;                    &quot;inventory is not present&quot;, &quot;check.inventory&quot;, &quot;Check_Inventory&quot;, HttpStatus.BAD_REQUEST);
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        inventoryService.deleteInventory(itemId);</b>
+<b class="fc">&nbsp;        return responseHandeler.buildSuccessResponse( &quot;UPDATE_INVENTORY&quot;, &quot;update.inventory&quot;, &quot;Inventory updated successfully&quot;, HttpStatus.OK);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public ResponseEntity&lt;Object&gt; deleteUser(@Parameter(in = ParameterIn.PATH, description = &quot;The name that needs to be deleted&quot;, required=true, schema=@Schema()) @PathVariable(&quot;userid&quot;) String userid,HttpServletRequest request
+&nbsp;) {
+&nbsp;
+<b class="fc">&nbsp;        String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);</b>
+&nbsp;
+<b class="fc">&nbsp;        if (!securityApi.authenticateUserWithCredentials(authorization , &quot;ADMIN&quot;)) {</b>
+<b class="fc">&nbsp;            return responseHandeler.buildErrorResponse(</b>
+&nbsp;                    &quot;AC1001&quot;, &quot;provided Authentication is wrong or user is not authorized to perform this action&quot;, &quot;1001&quot;,
+&nbsp;                    &quot;Authentication is worng&quot;, &quot;Auth_check&quot;, &quot;AUTH_CHECK&quot;, HttpStatus.UNAUTHORIZED);
+&nbsp;        }
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;        UserEntity existingUser = userService.getUserbyUserId(userid);</b>
+&nbsp;
+<b class="fc">&nbsp;        if (existingUser == null || &quot;N&quot;.equals(existingUser.getStatus())) {</b>
+<b class="fc">&nbsp;            return responseHandeler.buildErrorResponse(</b>
+&nbsp;                    &quot;BR1001&quot;, &quot;user does not exist&quot;, &quot;1004&quot;,
+&nbsp;                    &quot;user is not present&quot;, &quot;user_check&quot;, &quot;Check_user&quot;, HttpStatus.BAD_REQUEST);
+&nbsp;        }
+&nbsp;
+&nbsp;
+<b class="fc">&nbsp;        userService.deleteUserService(userid);</b>
+<b class="fc">&nbsp;        return responseHandeler.buildSuccessResponse( &quot;DELETE_USER&quot;, &quot;delete_user&quot;, &quot;User deleted successfully&quot;, HttpStatus.OK);</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-06-21 11:02</div>
+</div>
+</body>
+</html>
