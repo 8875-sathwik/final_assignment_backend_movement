@@ -35,6 +35,11 @@
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
     <filter-actions connection-id="4a943896-4182-4190-a659-ac2c2e2f0d5f" dataset="dbkms.users" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="4a943896-4182-4190-a659-ac2c2e2f0d5f" dataset="maindb.inventory" active-filter-id="3b2d2a4e-f29a-42c8-b23a-cb999fd4577a">
+      <filter id="3b2d2a4e-f29a-42c8-b23a-cb999fd4577a" name="Filter 1" temporary="false" custom-name="false" type="basic" join-type="AND">
+        <condition column="id" operator="=" value="" active="true" />
+      </filter>
+    </filter-actions>
     <filter-actions connection-id="4a943896-4182-4190-a659-ac2c2e2f0d5f" dataset="sys.sys_config" active-filter-id="" />
     <filter-actions connection-id="4a943896-4182-4190-a659-ac2c2e2f0d5f" dataset="mysql.user" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="4a943896-4182-4190-a659-ac2c2e2f0d5f" dataset="maindb.users" active-filter-id="EMPTY_FILTER" />

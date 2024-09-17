@@ -1,0 +1,26 @@
+delete:
+  tags:
+    - user
+  summary: Delete user
+  description: This can only be done by the logged in user.
+  operationId: deleteUser
+  security:
+    - staffToken: []
+    - adminToken: []
+  parameters:
+    - name: username
+      in: path
+      description: The name that needs to be deleted
+      required: true
+      schema:
+        type: string
+  responses:
+    '400':
+      description: Invalid username supplied
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\Error.yaml
+        application/xml:
+          schema:
+            $ref: ..\components\schemas\Error.yaml

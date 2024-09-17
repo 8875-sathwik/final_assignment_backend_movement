@@ -1,0 +1,42 @@
+type: object
+properties:
+  errors:
+    type: array
+    items:
+      type: object
+      properties:
+        code:
+          type: string
+          example: code
+        message:
+          type: string
+          example: message in String
+    description: Array of errors
+  errorCode:
+    type: string
+    example: errorCode
+    description: Error code
+  errorUserMsg:
+    type: string
+    example: errorUserMsg in string
+    description: User-friendly error message
+  step:
+    type: string
+    example: step in string
+    description: Step in the process where the error occurred
+  status:
+    type: string
+    example: FAILED
+    description: Status of the operation
+  serviceRequestId:
+    type: string
+    example: string
+    description: Service request ID
+  httpErrorCode:
+    type: string
+    example: '400'
+    description: HTTP error code
+  serviceFlow:
+    type: string
+    example: string
+    description: Service flow

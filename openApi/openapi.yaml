@@ -1,0 +1,55 @@
+openapi: 3.0.3
+info:
+  title: Grocery store Application
+  description: |
+    API documentation for managing a grocery store inventory.
+  version: 1.0.11
+servers:
+  - url: https://inventoryStore3.swagger.io/api/v3
+tags:
+  - name: inventory
+    description: grocery store inventory
+  - name: user
+    description: Operations about user
+  - name: sellInventory
+    description: Operations about inventory
+paths:
+  /update-inventory:
+    $ref: paths/update-inventory.yaml
+  /delete-inventory:
+    $ref: paths/delete-inventory.yaml
+  /create-inventory:
+    $ref: paths/create-inventory.yaml
+  /fetch-inventory:
+    $ref: paths/fetch-inventory.yaml
+  /v1/sell/inventory:
+    $ref: paths/v1_sell_inventory.yaml
+  /create/user:
+    $ref: paths/create_user.yaml
+  /user/login:
+    $ref: paths/user_login.yaml
+  /user/logout:
+    $ref: paths/user_logout.yaml
+  /user/{userid}:
+    $ref: paths/user_{userid}.yaml
+  /update/user/{username}:
+    $ref: paths/update_user_{username}.yaml
+  /delete/user/{username}:
+    $ref: paths/delete_user_{username}.yaml
+components:
+  securitySchemes:
+    adminToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Must pass JWT in HTTP Header for admin access
+    staffToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Must pass JWT in HTTP Header for staff access
+    BasicAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Must pass JWT in HTTP Header for staff access

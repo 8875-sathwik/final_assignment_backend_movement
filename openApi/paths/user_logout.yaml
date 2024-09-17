@@ -1,0 +1,12 @@
+post:
+  tags:
+    - user
+  summary: Logs out current logged in user session
+  description: ''
+  operationId: logoutUser
+  security:
+    - adminToken: []
+    - staffToken: []
+  responses:
+    '200':
+      description: Successful operation

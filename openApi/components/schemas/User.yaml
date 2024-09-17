@@ -1,0 +1,41 @@
+type: object
+properties:
+  id:
+    type: integer
+    example: 10
+  username:
+    type: string
+    example: theUser
+  workspaceId:
+    type: string
+    example: ADMIN/STAFF
+  firstName:
+    type: string
+    example: John
+  lastName:
+    type: string
+    example: James
+  email:
+    type: string
+    format: email
+    example: john@email.com
+  password:
+    type: string
+    example: 12345
+  phone:
+    type: string
+    example: 77123457887
+  userStatus:
+    type: integer
+    description: User Status (e.g., active/inactive)
+    example: 1
+required:
+  - id
+  - username
+  - workspaceId
+  - firstName
+  - lastName
+  - email
+  - password
+  - phone
+  - userStatus

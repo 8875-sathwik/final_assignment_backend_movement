@@ -1,0 +1,34 @@
+delete:
+  tags:
+    - inventory
+  summary: Delete an existing inventory
+  description: Delete an existing inventory by Id
+  parameters:
+    - in: query
+      name: itemId
+      required: true
+      description: ID of the item to delete.
+      schema:
+        type: integer
+  operationId: deleteInventory
+  security:
+    - adminToken: []
+  responses:
+    '200':
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\SuccessResponse.yaml
+        application/xml:
+          schema:
+            $ref: ..\components\schemas\SuccessResponse.yaml
+    '400':
+      description: Inventory not found
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\Error.yaml
+        application/xml:
+          schema:
+            $ref: ..\components\schemas\Error.yaml

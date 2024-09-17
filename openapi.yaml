@@ -1,0 +1,970 @@
+openapi: 3.0.3
+info:
+  title: Grocery store Application
+  description: |
+    API documentation for managing a grocery store inventory.
+  version: 1.0.11
+servers:
+  - url: https://inventoryStore3.swagger.io/api/v3
+tags:
+  - name: inventory
+    description: grocery store inventory
+  - name: user
+    description: Operations about user
+  - name: sellInventory
+    description: Operations about inventory
+paths:
+  /update-inventory:
+    put:
+      tags:
+        - inventory
+      summary: Update an existing inventory
+      description: Update an existing inventory by Id
+      operationId: updateInventory
+      security:
+        - adminToken: []
+      requestBody:
+        description: Update an existent inventory in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryItem'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/InventoryItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/InventoryItem'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Inventory not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /delete-inventory:
+    delete:
+      tags:
+        - inventory
+      summary: Delete an existing inventory
+      description: Delete an existing inventory by Id
+      parameters:
+        - in: query
+          name: itemId
+          required: true
+          description: ID of the item to delete.
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+            maximum: 9223372036854775807
+      operationId: deleteInventory
+      security:
+        - adminToken: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Inventory not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized - Authentication failed or user does not have permissions for the requested operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'  # You can create an Error schema for consistency
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /create-inventory:
+    post:
+      tags:
+        - inventory
+      summary: Add a new inventory to the store
+      description: Add a new inventory to the store
+      operationId: addInventory
+      security:
+        - BasicAuth: []
+      requestBody:
+        description: Create a new inventory in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryItem'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/InventoryItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/InventoryItem'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventorySuccessResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/InventorySuccessResponse'
+        '401':
+          description: Unauthorized - Authentication failed or user does not have permissions for the requested operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'  # You can create an Error schema for consistency
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /fetch-inventory:
+    get:
+      tags:
+        - inventory
+      summary: Fetch inventory
+      description: Fetch inventory items
+      operationId: findInventory
+      security:
+        - adminToken: []
+        - staffToken: []
+      parameters:
+        - name: name
+          in: query
+          description: Name of the inventory item (optional, if provided, filters the inventory)
+          required: false
+          schema:
+            type: string
+            pattern : ^[a-zA-Z0-9]+$
+            maxLength: 100
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InventoryItemList'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InventoryItemList'
+        '400':
+          description: Invalid status value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+  /v1/sell/inventory:
+    post:
+      tags:
+        - sellInventory
+      summary: sell inventory from store
+      description: sell inventory from store
+      operationId: sellInventory
+      security:
+        - staffToken: []
+      requestBody:
+        description: sell inventory from store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SellItempayload'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SellItempayload'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SellItempayload'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorized - Authentication failed or user does not have permissions for the requested operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'  # You can create an Error schema for consistency
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+                
+  /create/user:
+    post:
+      tags:
+        - user
+      summary: Create user
+      description: This can only be done by the logged in user.
+      operationId: createUser
+      security:
+        - BasicAuth: []
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSuccessResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UserSuccessResponse'
+        '401':
+          description: Unauthorized - Authentication failed or user does not have permissions for the requested operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'  # You can create an Error schema for consistency
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /user/login:
+    post:
+      tags:
+        - user
+      summary: Logs user into the system
+      description: ''
+      operationId: loginUser
+      security:
+        - BasicAuth: []
+      requestBody:
+        description: User login credentials
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                username:
+                  type: string
+                  pattern : ^[a-zA-Z0-9]+$
+                  maxLength: 100
+                password:
+                  type: string
+                  pattern : ^[a-zA-Z0-9]+$
+                  maxLength: 100
+      responses:
+        '200':
+          description: Successful operation
+          headers:
+            X-Rate-Limit:
+              description: Calls per hour allowed by the user
+              schema:
+                type: integer
+                format: int32
+            X-Expires-After:
+              description: Date in UTC when token expires
+              schema:
+                type: string
+                format: date-time
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginSuccessResponse'
+        '401':
+          description: Unauthorized - Authentication failed or user does not have permissions for the requested operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'  # You can create an Error schema for consistency
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Invalid username/password supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /user/logout:
+    post:
+      tags:
+        - user
+      summary: Logs out current logged in user session
+      description: ''
+      operationId: logoutUser
+      security:
+        - adminToken: []
+        - staffToken: []
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  message:
+                    type: string
+                    pattern: ^[a-zA-Z0-9]+$
+                    maximum: 1000
+                    minimum: 0
+                    example: "user logged out successfully"
+        '401':
+          description: Unauthorized - Authentication failed or user does not have permissions for the requested operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'  # You can create an Error schema for consistency
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /user/{userid}:
+    get:
+      tags:
+        - user
+      summary: Fetch user
+      description: Fetch user 
+      operationId: findUserById
+      security:
+        - staffToken: []
+      parameters:
+        - name: userid
+          in: path
+          description: unique id assigned for an user
+          required: true
+          schema:
+            type: string
+            pattern : ^[a-zA-Z0-9]+$
+            maxLength: 100
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetails'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UserDetails'
+            application/x-www-form-urlencoded:
+              schema:
+                $ref: '#/components/schemas/UserDetails'
+        '401':
+          description: Unauthorized - Authentication failed or user does not have permissions for the requested operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'  # You can create an Error schema for consistency
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Invalid status value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /update/user/{username}:
+    put:
+      tags:
+        - user
+      summary: Update user
+      description: This can only be done by the logged in user.
+      operationId: updateUser
+      security:
+        - staffToken: []
+        - adminToken: []
+      parameters:
+        - name: username
+          in: path
+          description: Name that needs to be updated
+          required: true
+          schema:
+            type: string
+            pattern : ^[a-zA-Z0-9]+$
+            maxLength: 100
+      requestBody:
+        description: Update an existent user in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          description: Unauthorized - Authentication failed or user does not have permissions for the requested operation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'  # You can create an Error schema for consistency
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Invalid username supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /delete/user/{username}:
+    delete:
+      tags:
+        - user
+      summary: Delete user
+      description: This can only be done by the logged in user.
+      operationId: deleteUser
+      security:
+        - staffToken: []
+        - adminToken: []
+      parameters:
+        - name: username
+          in: path
+          description: The name that needs to be deleted
+          required: true
+          schema:
+            type: string
+            pattern : ^[a-zA-Z0-9]+$
+            maxLength: 100
+      responses:
+          '200':
+            description: User successfully deleted
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      pattern: ^[a-zA-Z0-9]+$
+                      maximum: 1000
+                      minimum: 0
+                      example: "User deleted successfully"
+          '401':
+            description: Unauthorized - Authentication failed or user does not have permissions for the requested operation.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'  # You can create an Error schema for consistency
+              application/xml:
+                schema:
+                  $ref: '#/components/schemas/Error'
+          '400':
+            description: Invalid username supplied
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+              application/xml:
+                schema:
+                  $ref: '#/components/schemas/Error'
+
+
+components:
+  securitySchemes:
+    adminToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Must pass JWT in HTTP Header for admin access
+    staffToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Must pass JWT in HTTP Header for staff access
+    BasicAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Must pass JWT in HTTP Header for staff access
+  schemas:
+    InventoryItem:
+      type: object
+      additionalProperties: false  # Keep additionalProperties as false
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+          minimum: 0  # Added minimum
+          maximum: 100000  # Added maximum for id
+        quantity:
+          type: integer
+          format: int32
+          example: 7
+          minimum: 0
+          maximum: 1000  # Added maximum for quantity
+        price:
+          type: number
+          format: float
+          example: 7.00
+          minimum: 0
+          maximum: 10000.00  # Added maximum for price
+        name:
+          type: string
+          description: Name of the inventory item
+          example: Apples
+          enum:
+            - Apples
+            - Bananas
+            - Milk
+
+    InventoryItemList:
+      type: object
+      additionalProperties: false
+      properties:
+        inventory:
+          type: array
+          items:
+            $ref: '#/components/schemas/InventoryItem'
+
+    User:
+      type: object
+      additionalProperties: false  # Keep additionalProperties as false
+      properties:
+        id:
+          type: integer
+          example: 10
+          minimum: 0
+          format: int64
+          maximum: 9223372036854775807
+        username:
+          type: string
+          example: theUser
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+          maxLength: 20
+        workspaceId:
+          type: string
+          example: ADMIN/STAFF
+          maxLength: 20
+        firstName:
+          type: string
+          example: John
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+          maxLength: 50
+        lastName:
+          type: string
+          example: James
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+          maxLength: 50
+        email:
+          type: string
+          format: email
+          example: john@email.com
+          maxLength: 100
+          pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'  # String pattern for email
+        password:
+          type: string
+          example: 12345
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+          maxLength: 50
+        phone:
+          type: string
+          example: 77123457887
+          pattern: '^[0-9]+$'  # Numeric pattern for phone
+          maxLength: 50
+        userStatus:
+          type: integer
+          description: User Status (e.g., active/inactive)
+          example: 1
+          format: int32
+          enum:
+            - 0  # Inactive
+            - 1  # Active
+      required:
+        - id
+        - username
+        - workspaceId
+        - firstName
+        - lastName
+        - email
+        - password
+        - phone
+        - userStatus
+
+    SellItempayload:
+      type: object
+      additionalProperties: false  # Keep additionalProperties as false
+      properties:
+        quantity:
+          type: integer
+          format: int32
+          example: 7
+          minimum: 0
+          maximum: 1000  # Added maximum for quantity
+        name:
+          type: string
+          description: Name of the inventory item
+          example: Apples
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+          maxLength: 50
+
+    UserDetails:
+      type: object
+      additionalProperties: false  # Keep additionalProperties as false
+      properties:
+        username:
+          type: string
+          pattern: ^[a-zA-Z0-9]+$
+          example: theUser
+        workspaceId:
+          type: string
+          pattern: ^[a-zA-Z0-9]+$
+          maximum: 1000
+          minimum: 0
+          example: ADMIN/STAFF
+        firstName:
+          type: string
+          pattern: ^[a-zA-Z0-9]+$
+          maximum: 1000
+          minimum: 0
+          example: John
+        lastName:
+          type: string
+          example: James
+          pattern: ^[a-zA-Z0-9]+$
+          maxLength: 100
+        email:
+          type: string
+          format: email
+          example: john@email.com
+          maxLength: 100
+          pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'  # String pattern for email
+        phone:
+          type: string
+          example: 77123457887
+          pattern: '^[0-9]+$'  # Numeric pattern for phone
+        userStatus:
+          type: integer
+          description: User Status (e.g., active/inactive)
+          example: 1
+        userid:
+          type: string
+          example: "unique string"
+          description: unique userid
+          maximum: 1000
+          minimum: 0
+
+    UserSuccessResponse:
+      type: object
+      additionalProperties: false  # Keep additionalProperties as false
+      properties:
+        serviceRequestId:
+          type: string
+          example: "unique string"
+          description: Service request ID
+          maxLength: 100
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+        userid:
+          type: string
+          example: "unique string"
+          maximum: 1000
+          minimum: 0
+          description: unique userid
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+        serviceFlow:
+          type: string
+          example: "string"
+          description: Service flow
+          maximum: 1000
+          minimum: 0
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+        status:
+          type: string
+          example: "SUCCEEDED"
+          maximum: 1000
+          minimum: 0
+          description: Status of the operation
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+        code:
+          type: string
+          example: "code"
+          maxLength: 100
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+          description: Code related to the success message
+        message:
+          type: string
+          example: "message string"
+          pattern: ^[a-zA-Z0-9]+$
+          description: Success message
+          maxLength: 100
+
+    LoginSuccessResponse:
+      type: object
+      additionalProperties: false  # Keep additionalProperties as false
+      properties:
+        Authtoken:
+          type: string
+          example: "unique JWT token"
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+          description: Service request ID
+          maximum: 100000
+          minimum: 0
+        serviceRequestId:
+          type: string
+          example: "unique string"
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+          description: Service request ID
+          maxLength: 100
+        userid:
+          type: string
+          example: "unique string"
+          maxLength: 100
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+          description: unique userid
+        serviceFlow:
+          type: string
+          example: "string"
+          description: Service flow
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+          maxLength: 100
+        status:
+          type: string
+          example: "SUCCEEDED"
+          pattern: ^[a-zA-Z0-9]+$
+          description: Status of the operation
+          maxLength: 100
+        code:
+          type: string
+          example: "code"
+          pattern: ^[a-zA-Z0-9]+$
+          description: Code related to the success message
+          maxLength: 100
+        message:
+          type: string
+          example: "message string"
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+          description: Success message
+          maxLength: 100
+
+    SuccessResponse:
+      type: object
+      additionalProperties: false  # Keep additionalProperties as false
+      properties:
+        serviceRequestId:
+          type: string
+          example: "unique string"
+          description: Service request ID
+          maxLength: 100
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+        serviceFlow:
+          type: string
+          example: "string"
+          description: Service flow
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+          maxLength: 100
+        status:
+          type: string
+          example: "SUCCEEDED"
+          description: Status of the operation
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+          maxLength: 100
+        code:
+          type: string
+          example: "code"
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+          description: Code related to the success message
+          maxLength: 100
+        message:
+          type: string
+          example: "message string"
+          description: Success message
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+          maxLength: 100
+
+    InventorySuccessResponse:
+      type: object
+      additionalProperties: false  # Keep additionalProperties as false
+      properties:
+        serviceRequestId:
+          type: string
+          example: "unique string"
+          pattern: ^[a-zA-Z0-9]+$
+          maxLength: 100
+          description: Service request ID
+        serviceFlow:
+          type: string
+          example: "string"
+          description: Service flow
+          maxLength: 100
+        status:
+          type: string
+          example: "SUCCEEDED"
+          pattern: ^[a-zA-Z0-9]+$
+          description: Status of the operation
+          maxLength: 100
+        code:
+          type: string
+          maxLength: 100
+          example: "code"
+          pattern: ^[a-zA-Z0-9]+$
+          description: Code related to the success message
+        message:
+          type: string
+          example: "message string"
+          description: Success message
+          maxLength: 100
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+        inventoryItem:
+          $ref: '#/components/schemas/InventoryItem'
+
+    Error:
+      type: object
+      additionalProperties: false  # Allow additional properties for error
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            additionalProperties: false
+            properties:
+              code:
+                type: string
+                example: "code"
+                pattern: ^[a-zA-Z0-9]+$
+                maximum: 1000
+                minimum: 0
+              message:
+                type: string
+                pattern: ^[a-zA-Z0-9]+$
+                example: "message in String"
+                maximum: 1000
+                minimum: 0
+          description: Array of errors
+        errorCode:
+          type: string
+          example: "errorCode"
+          pattern: ^[a-zA-Z0-9]+$
+          description: Error code
+          maximum: 1000
+          minimum: 0
+        errorUserMsg:
+          type: string
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+          example: "errorUserMsg in string"
+          maximum: 1000
+          minimum: 0
+          description: User-friendly error message
+        step:
+          type: string
+          example: "step in string"
+          pattern: ^[a-zA-Z0-9]+$
+          maximum: 1000
+          minimum: 0
+          description: Step in the process where the error occurred
+        status:
+          type: string
+          pattern: ^[a-zA-Z0-9]+$
+          example: "FAILED"
+          maximum: 1000
+          minimum: 0
+          description: Status of the operation
+        serviceRequestId:
+          type: string
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+          example: "string"
+          description: Service request ID
+        httpErrorCode:
+          type: string
+          example: "400"
+          maximum: 1000
+          minimum: 0
+          pattern: '^[0-9]+$'  # Numeric pattern for HTTP error code
+          description: HTTP error code
+        serviceFlow:
+          type: string
+          example: "string"
+          maximum: 1000
+          minimum: 0
+          pattern: '^[a-zA-Z0-9]+$'  # String pattern
+          description: Service flow
+

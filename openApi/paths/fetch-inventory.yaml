@@ -1,0 +1,41 @@
+get:
+  tags:
+    - inventory
+  summary: Fetch inventory
+  description: Fetch inventory items
+  operationId: findInventory
+  security:
+    - adminToken: []
+    - staffToken: []
+  parameters:
+    - name: name
+      in: query
+      description: >-
+        Name of the inventory item (optional, if provided, filters the
+        inventory)
+      required: false
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ..\components\schemas\InventoryItemList.yaml
+        application/xml:
+          schema:
+            type: array
+            items:
+              $ref: ..\components\schemas\InventoryItemList.yaml
+    '400':
+      description: Invalid status value
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\Error.yaml
+        application/xml:
+          schema:
+            $ref: ..\components\schemas\Error.yaml

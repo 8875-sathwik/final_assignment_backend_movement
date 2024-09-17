@@ -1,0 +1,40 @@
+post:
+  tags:
+    - sellInventory
+  summary: sell inventory from store
+  description: sell inventory from store
+  operationId: sellInventory
+  security:
+    - staffToken: []
+  requestBody:
+    description: sell inventory from store
+    content:
+      application/json:
+        schema:
+          $ref: ..\components\schemas\SellItempayload.yaml
+      application/xml:
+        schema:
+          $ref: ..\components\schemas\SellItempayload.yaml
+      application/x-www-form-urlencoded:
+        schema:
+          $ref: ..\components\schemas\SellItempayload.yaml
+    required: true
+  responses:
+    '200':
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\SuccessResponse.yaml
+        application/xml:
+          schema:
+            $ref: ..\components\schemas\SuccessResponse.yaml
+    '400':
+      description: Invalid input
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\Error.yaml
+        application/xml:
+          schema:
+            $ref: ..\components\schemas\Error.yaml

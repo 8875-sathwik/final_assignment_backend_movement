@@ -1,0 +1,40 @@
+post:
+  tags:
+    - user
+  summary: Logs user into the system
+  description: ''
+  operationId: loginUser
+  security:
+    - BasicAuth: []
+  requestBody:
+    description: User login credentials
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            username:
+              type: string
+            password:
+              type: string
+  responses:
+    '200':
+      description: Successful operation
+      headers:
+        X-Rate-Limit:
+          description: Calls per hour allowed by the user
+          schema:
+            type: integer
+            format: int32
+        X-Expires-After:
+          description: Date in UTC when token expires
+          schema:
+            type: string
+            format: date-time
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\LoginSuccessResponse.yaml
+    '400':
+      description: Invalid username/password supplied

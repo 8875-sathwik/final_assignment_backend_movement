@@ -1,0 +1,40 @@
+post:
+  tags:
+    - inventory
+  summary: Add a new inventory to the store
+  description: Add a new inventory to the store
+  operationId: addInventory
+  security:
+    - BasicAuth: []
+  requestBody:
+    description: Create a new inventory in the store
+    content:
+      application/json:
+        schema:
+          $ref: ..\components\schemas\InventoryItem.yaml
+      application/xml:
+        schema:
+          $ref: ..\components\schemas\InventoryItem.yaml
+      application/x-www-form-urlencoded:
+        schema:
+          $ref: ..\components\schemas\InventoryItem.yaml
+    required: true
+  responses:
+    '200':
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\InventorySuccessResponse.yaml
+        application/xml:
+          schema:
+            $ref: ..\components\schemas\InventorySuccessResponse.yaml
+    '400':
+      description: Invalid input
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\Error.yaml
+        application/xml:
+          schema:
+            $ref: ..\components\schemas\Error.yaml

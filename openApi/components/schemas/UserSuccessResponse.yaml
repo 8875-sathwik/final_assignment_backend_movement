@@ -1,0 +1,26 @@
+type: object
+properties:
+  serviceRequestId:
+    type: string
+    example: unique string
+    description: Service request ID
+  userid:
+    type: string
+    example: unique string
+    description: unique userid
+  serviceFlow:
+    type: string
+    example: string
+    description: Service flow
+  status:
+    type: string
+    example: SUCCEEDED
+    description: Status of the operation
+  code:
+    type: string
+    example: code
+    description: Code related to the success message
+  message:
+    type: string
+    example: message string
+    description: Success message

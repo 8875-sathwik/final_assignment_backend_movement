@@ -1,0 +1,6 @@
+type: object
+properties:
+  inventory:
+    type: array
+    items:
+      $ref: .\InventoryItem.yaml

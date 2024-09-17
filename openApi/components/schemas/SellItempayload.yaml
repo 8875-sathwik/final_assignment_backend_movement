@@ -1,0 +1,10 @@
+type: object
+properties:
+  quantity:
+    type: integer
+    format: int32
+    example: 7
+  name:
+    type: string
+    description: Name of the inventory item
+    example: Apples

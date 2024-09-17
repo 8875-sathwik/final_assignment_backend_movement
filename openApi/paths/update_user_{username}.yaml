@@ -1,0 +1,47 @@
+put:
+  tags:
+    - user
+  summary: Update user
+  description: This can only be done by the logged in user.
+  operationId: updateUser
+  security:
+    - staffToken: []
+    - adminToken: []
+  parameters:
+    - name: username
+      in: path
+      description: Name that needs to be updated
+      required: true
+      schema:
+        type: string
+  requestBody:
+    description: Update an existent user in the store
+    content:
+      application/json:
+        schema:
+          $ref: ..\components\schemas\User.yaml
+      application/xml:
+        schema:
+          $ref: ..\components\schemas\User.yaml
+      application/x-www-form-urlencoded:
+        schema:
+          $ref: ..\components\schemas\User.yaml
+  responses:
+    '200':
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\SuccessResponse.yaml
+        application/xml:
+          schema:
+            $ref: ..\components\schemas\SuccessResponse.yaml
+    '400':
+      description: Invalid username supplied
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\Error.yaml
+        application/xml:
+          schema:
+            $ref: ..\components\schemas\Error.yaml

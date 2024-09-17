@@ -1,0 +1,40 @@
+put:
+  tags:
+    - inventory
+  summary: Update an existing inventory
+  description: Update an existing inventory by Id
+  operationId: updateInventory
+  security:
+    - adminToken: []
+  requestBody:
+    description: Update an existent inventory in the store
+    content:
+      application/json:
+        schema:
+          $ref: ..\components\schemas\InventoryItem.yaml
+      application/xml:
+        schema:
+          $ref: ..\components\schemas\InventoryItem.yaml
+      application/x-www-form-urlencoded:
+        schema:
+          $ref: ..\components\schemas\InventoryItem.yaml
+    required: true
+  responses:
+    '200':
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\SuccessResponse.yaml
+        application/xml:
+          schema:
+            $ref: ..\components\schemas\SuccessResponse.yaml
+    '400':
+      description: Inventory not found
+      content:
+        application/json:
+          schema:
+            $ref: ..\components\schemas\Error.yaml
+        application/xml:
+          schema:
+            $ref: ..\components\schemas\Error.yaml
